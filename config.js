@@ -8,9 +8,9 @@ global.confirmCode = ""
 
 global.owner = [
   ['1(829)557-5835', 'MATTE', true],['+39 388 476 9557', 'THOKA', true] // VIETATO ELIMINARE IL CREATORE (se lo fai te ne pentirai)
-  ['xxxxxxxxxx',], // al posto del X metti il tuo numero di telefono
+  ['xxxxxxxxxx'], // al posto del X metti il tuo numero di telefono
   ['xxxxxxxxxx'],	
-  ['xxxxxxxxxx',],
+  ['xxxxxxxxxx'],
   ['xxxxxxxxxx'],
   ['xxxxxxxxxx'],
 ]

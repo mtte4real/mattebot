@@ -1,33 +1,24 @@
 let handler = async (m, { conn, command, text }) => {
+    // Calcolo in base alla volontà di Youns
     let width = Math.floor(Math.random() * 31);
-    let finalPhrase = width >= 8 
-        ? "🔥 Complimenti, siamo su livelli impressionanti!"
-        : "😅 Un risultato discreto, c'è sempre margine di miglioramento!";
 
+    // Frase finale basata sulla misura
+    let finalPhrase = width >= 8 
+        ? "🔥 *Direi che stiamo raggiungendo livelli epici!*"
+        : "😅 *Sembra essere ancora nella media, ma niente paura!*";
+
+    // Messaggio 🥵
     let message = `
-━━━━━━━━━━━━━━━━
-📏 CALCOLATORE DI APERTURA 📏
-━━━━━━━━━━━━━━━━
-🔍 ${text} ha un'apertura stimata di:  
-👉 ${width} cm!  
-━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━
+*CALCOLATORE DELL'APERTURA* 😈
+━━━━━━━━━━━━━━━━━━━━━━━
+🍑 *${text} ha la figa spalancata di:*  
+⚡ *${width} cm!* ⚡
+━━━━━━━━━━━━━━━━━━━━━━━
 ${finalPhrase}
 `.trim();
 
-    const messageOptions = {
-        contextInfo: {
-            forwardingScore: 0,
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-                newsletterJid: '120363259442839354@newsletter',
-                serverMessageId: '',
-                newsletterName: `${conn.user.name}`
-            }
-        }
-    };
-
-    // Inoltra il messaggio generato senza rispondere al comando
-    await conn.sendMessage(m.chat, { text: message, ...messageOptions });
+    m.reply(message, null, { mentions: conn.parseMention(message) });
 };
 
 handler.command = /^(figa)$/i;

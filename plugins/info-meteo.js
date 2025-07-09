@@ -1,48 +1,57 @@
 import axios from 'axios';
 
-async function handler(m, { conn, args }) {
-  if (!args[0]) return m.reply('❗ Inserisci il nome di una città. Uso: .meteo [nome città]');
+let handler = async (msg, { args }) => {
+  if (!args[0]) {
+    throw '⚠️ *Inserisci il nome di una città o di un paese per ottenere le condizioni meteo.*';
+  }
 
   try {
-    const city = args.join(' ');
-    const apiKey = '2d61a72574c11c4f36173b627f8cb177';
-    const url = `http://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
+    const response = await axios.get(
+      `https://api.openweathermap.org/data/2.5/weather?q=${args[0]}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273`
+    );
 
-    const res = await axios.get(url);
-    const data = res.data;
+    const data = response.data;
+    const {
+      name: cityName,
+      sys: { country },
+      weather,
+      main: { temp, temp_min, temp_max, humidity },
+      wind: { speed: windSpeed }
+    } = data;
 
-    const weather = `
-> 🌍 Info Meteo per ${data.name}, ${data.sys.country} 🌍
-> 🌡 Temperatura: ${data.main.temp}°C
-> 🌡 Percepita: ${data.main.feels_like}°C
-> 🌡 Minima: ${data.main.temp_min}°C
-> 🌡 Massima: ${data.main.temp_max}°C
-> 💧 Umidità: ${data.main.humidity}%
-> ☁ Meteo: ${data.weather[0].main}
-> 🌫 Descrizione: ${data.weather[0].description}
-> 💨 Vento: ${data.wind.speed} m/s
-> 🔽 Pressione: ${data.main.pressure} hPa
+    const weatherDescription = weather[0].description;
 
-> © Powered By CRISS AI
-    `.trim();
+    // Formatta il messaggio di risposta
+    const replyMessage = `⬣━❰ *Informazioni Meteo* ❱━⬣
 
-    m.reply(weather);
-  } catch (e) {
-    console.error(e);
-    if (e.response && e.response.status === 404) {
-      m.reply('🚫 Città non trovata. Controlla la scrittura e riprova.');
-    } else {
-      m.reply('⚠ Si è verificato un errore durante il recupero delle informazioni meteo. Riprova più tardi.');
-    }
+📍 *Città*: ${cityName}  
+🗺️ *Nazione*: ${country}  
+
+🌤️ *Condizioni Meteo*:  
+   ${weatherDescription}  
+
+🌡️ *Temperatura*:  
+   - Attuale: ${temp}°C  
+   - Minima: ${temp_min}°C  
+   - Massima: ${temp_max}°C  
+
+💦 *Umidità*: ${humidity}%  
+🌬️ *Vento*: ${windSpeed} km/h  
+
+⬣━━━━━━━━━❰🌦️❱━━━━━━━━━⬣`;
+
+    msg.reply(replyMessage);
+
+  } catch (error) {
+    msg.reply(
+      '⚠️ *Errore: non è stato possibile trovare risultati per la città o il paese specificati. Assicurati che esistano e riprova.*'
+    );
   }
-}
+};
 
-handler.command = /^(meteo)$/i;
-handler.help = ['meteo <città>'];
-handler.tags = ['other'];
-handler.description = 'Ottieni informazioni meteo per una località';
-handler.react = '🌤';
-handler.limit = true;
-handler.exp = 5;
+// Configura il comando per il bot
+handler.command = ['meteo', 'clima'];
+handler.help = ['meteo <città/paese>'];
+handler.tags = ['info'];
 
 export default handler;

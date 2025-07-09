@@ -1,94 +1,59 @@
+import os from 'os';
+import util from 'util';
+import humanReadable from 'human-readable';
+import { default as makeWASocket } from '@whiskeysockets/baileys';
+import { promises as fs } from 'fs';
 import { performance } from 'perf_hooks';
-import fetch from 'node-fetch'; // Assicurati di avere node-fetch installato
 
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
+let handler = async (m, { conn, usedPrefix }) => {
+  const botName = global.db.data.nomedelbot || "ᴼʳⁱᵍⁱⁿ ᴮᵒᵗ✦";
+  
+  const adminMenu = `
+════════════════════
+          👑 *𝐌𝐞𝐧𝐮 𝐀𝐝𝐦𝐢𝐧* 👑
+════════════════════
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+➤ ${usedPrefix}𝐩𝐫𝐨𝐦𝐮𝐨𝐯𝐢 / 𝐦𝐞𝐭𝐭𝐢𝐚𝐝𝐦𝐢𝐧
+➤ ${usedPrefix}𝐫𝐞𝐭𝐫𝐨𝐜𝐞𝐝𝐢 / 𝐭𝐨𝐠𝐥𝐢𝐚𝐝𝐦𝐢𝐧
+➤ ${usedPrefix}𝐰𝐚𝐫𝐧 / 𝐮𝐧𝐰𝐚𝐫𝐧
+➤ ${usedPrefix}𝐦𝐮𝐭𝐚 / 𝐬𝐦𝐮𝐭𝐚
+➤ ${usedPrefix}𝐡𝐢𝐝𝐞𝐭𝐚𝐠
+➤ ${usedPrefix}𝐭𝐚𝐠𝐚𝐥𝐥 / 𝐦𝐚𝐫𝐜𝐚𝐫
+➤ ${usedPrefix}𝐩𝐚𝐫𝐥𝐚𝐭𝐞 / 𝐳𝐢𝐭𝐭𝐢
+➤ ${usedPrefix}𝐬𝐞𝐭𝐰𝐞𝐥𝐜𝐨𝐦𝐞
+➤ ${usedPrefix}𝐬𝐞𝐭𝐛𝐲𝐞
+➤ ${usedPrefix}𝐢𝐧𝐚𝐭𝐭𝐢𝐯𝐢
+➤ ${usedPrefix}𝐥𝐢𝐬𝐭𝐚𝐧𝐮𝐦 + 𝐩𝐫𝐞𝐟𝐢𝐬𝐬𝐨
+➤ ${usedPrefix}𝐩𝐮𝐥𝐢𝐳𝐢𝐚 + 𝐩𝐫𝐞𝐟𝐢𝐬𝐬𝐨
 
-const handler = async (message, { conn, usedPrefix, command }) => {
-    const userCount = Object.keys(global.db.data.users).length;
-    const botName = global.db.data.nomedelbot || 'ChatUnity';
+════════════════════
+`.trim();
 
-    if (command === 'menu') {
-        return await (await import('./menu-principale.js')).default(message, { conn, usedPrefix });
+  // Invia il messaggio con una grafica migliorata
+  await conn.sendMessage(m.chat, {
+    text: adminMenu,
+    contextInfo: {
+      externalAdReply: {
+        title: "ᴼʳⁱᵍⁱⁿ ᴮᵒᵗ✦ - 𝐌𝐄𝐍𝐔 𝐀𝐃𝐌𝐈𝐍",
+        body: "𝐁𝐘 𝐘𝐎𝐔𝐍𝐒 - 𝐓𝐇𝐄 𝐁𝐄𝐒𝐓",
+        thumbnail: await fs.readFile('./storage/image/origin.jpg'), // Assicurati che l'immagine sia disponibile
+        mediaType: 1,
+        showAdAttribution: true,
+        renderLargerThumbnail: true,
+      },
+     // forwardingScore: 1,
+     // isForwarded: true,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: '120363370244642449@newsletter',
+        serverMessageId: '',
+        newsletterName: botName
+      }
     }
-    if (command === 'menuowner') {
-        return await (await import('./menu-owner.js')).default(message, { conn, usedPrefix });
-    }
-    if (command === 'menusicurezza') {
-        return await (await import('./menu-sicurezza.js')).default(message, { conn, usedPrefix });
-    }
-    if (command === 'menugruppo') {
-        return await (await import('./menu-gruppo.js')).default(message, { conn, usedPrefix });
-    }
-
-    const menuText = generateMenuText(usedPrefix, botName, userCount);
-
-    const videoPath = path.join(__dirname, '../menu/edit4.mp4'); 
-    await conn.sendMessage(
-        message.chat,
-        {
-            video: { url: videoPath },
-            caption: menuText,
-            footer: 'Scegli un menu:',
-            buttons: [
-                { buttonId: `${usedPrefix}menu`, buttonText: { displayText: "🏠 Menu Principale" }, type: 1 },
-                { buttonId: `${usedPrefix}menuowner`, buttonText: { displayText: "👑 Menu Owner" }, type: 1 },
-                { buttonId: `${usedPrefix}menusicurezza`, buttonText: { displayText: "🚨 Menu Sicurezza" }, type: 1 },
-                { buttonId: `${usedPrefix}menugruppo`, buttonText: { displayText: "👥 Menu Gruppo" }, type: 1 },
-                { buttonId: `${usedPrefix}menuia`, buttonText: { displayText: "🤖 Menu IA" }, type: 1 }
-            ],
-            viewOnce: true,
-            headerType: 4
-        }
-    );
+  }, { quoted: m });
 };
 
-handler.help = ['menuadmin', 'menu', 'menuowner', 'menusicurezza', 'menugruppo'];
-handler.tags = ['menuadmin'];
-handler.command = /^(menuadmin|menu|menuowner|menusicurezza|menugruppo)$/i;
+handler.help = ["menuadm", "admin"];
+handler.tags = ['menu'];
+handler.command = /^(menuadm|admin)$/i;
 
 export default handler;
-
-function generateMenuText(prefix, botName, userCount) {
-    return `
-╭━〔*💬 𝑴𝑬𝑵𝑼 𝑨𝑫𝑴𝑰𝑵 💬*〕━┈⊷  
-┃◈╭─────────────·๏  
-┃◈┃• *𝑪𝑶𝑴𝑨𝑵𝑫𝑰 𝑨𝑫𝑴𝑰𝑵 👑*  
-┃◈┃  
-┃◈┃• 👑 *promuovi /mettiadmin*  
-┃◈┃• 👑 *retrocedi /togliadmin*  
-┃◈┃• 👑 *warn / unwarn*  
-┃◈┃• 👑 *muta / smuta*  
-┃◈┃• 👑 *setdescrizione* 
-┃◈┃• 👑 *setorario* 
-┃◈┃• 👑 *setnome*  
-┃◈┃• 👑 *hidetag*  
-┃◈┃• 👑 *kick / cacca*  
-┃◈┃• 👑 *admins*  
-┃◈┃• 👑 *hidetag*  
-┃◈┃• 👑 *tagall*  
-┃◈┃• 👑 *aperto / chiuso*  
-┃◈┃• 👑 *setwelcome*  
-┃◈┃• 👑 *setbye*  
-┃◈┃• 👑 *inattivi*  
-┃◈┃• 👑 *listanum + prefisso*  
-┃◈┃• 👑 *pulizia + prefisso*  
-┃◈┃• 👑 *clearplay*  
-┃◈┃• 👑 *regole/setregole*  
-┃◈┃• 👑 *quarantena*  
-┃◈┃• 👑 *ds*  
-┃◈┃• 👑 *listawarn*  
-┃◈┃• 👑 *link*  
-┃◈┃• 👑 *linkqr*  
-┃◈┃  
-┃◈└───────────┈⊷  
-╰━━━━━━━━━━━━━┈·๏  
-*•────────────•⟢*  
-> © ᴘᴏᴡᴇʀᴇᴅ ʙʏ 𝐂𝐡𝐚𝐭𝐔𝐧𝐢𝐭𝐲  
-*•────────────•⟢*  
-`.trim();
-}

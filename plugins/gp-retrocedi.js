@@ -24,9 +24,9 @@ conn.groupParticipantsUpdate(m.chat, [user], 'demote')
 }}
 handler.help = ['*593xxx*','*@usuario*','*responder chat*'].map(v => 'demote ' + v)
 handler.tags = ['group']
-handler.command = /^(r|retrocedi|togliadmin|r)$/i
+handler.command = /^(demote|retrocedi|togliadmin|r)$/i
 handler.group = true
-handler.admin = true
+handler.admin = true 
 handler.botAdmin = true
 handler.fail = null
 export default handler

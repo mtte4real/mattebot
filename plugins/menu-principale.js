@@ -1,64 +1,60 @@
+import os from 'os';
+import util from 'util';
+import humanReadable from 'human-readable';
+import { default as makeWASocket } from '@whiskeysockets/baileys';
+import { promises as fs } from 'fs';
 import { performance } from 'perf_hooks';
-import fetch from 'node-fetch';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+let handler = async (m, { conn, usedPrefix }) => {
+  const botName = global.db.data.nomedelbot || "ᴼʳⁱᵍⁱⁿ ᴮᵒᵗ✦";
+  const commandList = `
+✦ *𝐂𝐎𝐌𝐀𝐍𝐃𝐈 𝐃𝐄𝐋 𝐁𝐎𝐓* ✦
+────────────────────────
+➤ ${usedPrefix}𝐩𝐫𝐨𝐩𝐫𝐢𝐞𝐭𝐚𝐫𝐢𝐨
+➤ ${usedPrefix}𝐟𝐮𝐧𝐳𝐢𝐨𝐧𝐢
+➤ ${usedPrefix}𝐚𝐝𝐦𝐢𝐧
+➤ ${usedPrefix}𝐠𝐫𝐮𝐩𝐩𝐨
+➤ ${usedPrefix}𝐨𝐰𝐧𝐞𝐫
+➤ ${usedPrefix}𝐬𝐜𝐫𝐢𝐩𝐭
+➤ ${usedPrefix}𝐢𝐧𝐬𝐭𝐚𝐥𝐥𝐚
+➤ ${usedPrefix}𝐜𝐫𝐞𝐝𝐢𝐭𝐢
+────────────────────────
+${botName}  -  𝐕𝐄𝐑𝐒𝐈𝐎𝐍𝐄: ${vs}
+`.trim();
 
-const handler = async (message, { conn, usedPrefix, command }) => {
-    const userCount = Object.keys(global.db.data.users).length;
-    const botName = global.db.data.nomedelbot || 'ChatUnity';
-
-    const menuText = generateMenuText(usedPrefix, botName, userCount);
-
-    const videoPath = path.join(__dirname, '../menu/edit1.mp4'); // Cambia il nome se necessario
-    await conn.sendMessage(
-        message.chat,
-        {
-            video: { url: videoPath },
-            caption: menuText,
-            footer: 'Scegli un menu:',
-            buttons: [
-                { buttonId: `${usedPrefix}menuadmin`, buttonText: { displayText: "🛡️ Menu Admin" }, type: 1 },
-                { buttonId: `${usedPrefix}menuowner`, buttonText: { displayText: "👑 Menu Owner" }, type: 1 },
-                { buttonId: `${usedPrefix}menusicurezza`, buttonText: { displayText: "🚨 Menu Sicurezza" }, type: 1 },
-                { buttonId: `${usedPrefix}menugruppo`, buttonText: { displayText: "👥 Menu Gruppo" }, type: 1 },
-                { buttonId: `${usedPrefix}menuia`, buttonText: { displayText: "🤖 Menu IA" }, type: 1 }
-            ],
-            viewOnce: true,
-            headerType: 4
-        }
-    );
+  await conn.sendMessage(m.chat, {
+    text: commandList,
+    contextInfo: {
+      externalAdReply: {
+        title: "ᴼʳⁱᵍⁱⁿ ᴮᵒᵗ✦ - 𝐌𝐀𝐈𝐍 𝐌𝐄𝐍𝐔",
+        body: "𝐁𝐘 𝐘𝐎𝐔𝐍𝐒 - 𝐓𝐇𝐄 𝐁𝐄𝐒𝐓",
+        thumbnail: await fs.readFile('./storage/image/origin.jpg'),
+        mediaType: 1,
+        showAdAttribution: true,
+        renderLargerThumbnail: true,
+      },
+     // forwardingScore: 1,
+     // isForwarded: true,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: '120363370244642449@newsletter',
+        serverMessageId: '',
+        newsletterName: botName
+      }
+    }
+  }, { quoted: m });
 };
 
-handler.help = ['menu'];
+handler.help = ["menu"];
 handler.tags = ['menu'];
 handler.command = /^(menu|comandi)$/i;
 
 export default handler;
 
-function generateMenuText(prefix, botName, userCount) {
-    return `
-
-╭〔 *💬 𝑴𝑬𝑵𝑼 𝑫𝑬𝑳 𝑩𝑶𝑻 💬* 〕┈⊷
-┃◈╭───────────·๏
-┃◈┃• 👑 *${prefix}staff*
-┃◈┃• 👑 *${prefix}egemonia*
-┃◈┃• 📜 *${prefix}candidati*
-┃◈┃• 📥 *${prefix}installa*
-┃◈┃• 📖 *${prefix}guida*
-┃◈┃• ⚙ *${prefix}sistema*
-┃◈┃• ❓ *${prefix}FAQ*
-┃◈┃• 🚀 *${prefix}ping*
-┃◈┃• 📝 *${prefix}segnala* (comando)
-┃◈┃• 💡 *${prefix}consiglia* (comando)
-┃◈┃
-┃◈└───────────┈⊷
-┃◈┃• *𝑽𝑬𝑹𝑺𝑰𝑶𝑵𝑬:* ${vs}
-┃◈┃•  𝐂𝐎𝐋𝐋𝐀𝐁: 𝐃𝐑𝐆𝐁
-┃◈┃• *𝐒𝐔𝐏𝐏𝐎𝐑𝐓𝐎:* (.supporto)
-╰━━━━━━━━━━━━━┈·๏
-`.trim();
+function clockString(ms) {
+  const time = [
+    Math.floor(ms / 3600000),
+    Math.floor(ms / 60000) % 60,
+    Math.floor(ms / 1000) % 60
+  ].map(t => t.toString().padStart(2, '0')).join(':');
+  return time;
 }

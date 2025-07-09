@@ -1,66 +1,92 @@
+let war = '3';
+
 let handler = async (m, { conn, text, args, groupMetadata, usedPrefix, command }) => {
-  let war = 2 // <-- numero di warning prima del ban
-
-  let who
-  if (m.isGroup) {
-    who = m.mentionedJid?.[0] || m.quoted?.sender
-  } else {
-    who = m.chat
-  }
-
-  if (!who) return m.reply("❌ Devi menzionare un utente o rispondere a un suo messaggio.")
-
-  // 🔒 BLOCCA AVVERTIMENTI AL BOT
-  if (who === conn.user.jid) {
-    return m.reply("🚫 Non puoi warnare il bot.")
-  }
-
-  if (!(who in global.db.data.users)) {
-    return m.reply("❌ Utente non trovato nel database.")
-  }
-
-  let user = global.db.data.users[who]
-  let warn = user.warn || 0
-  let nomeDelBot = global.db.data.nomedelbot || `𝐂𝐡𝐚𝐭𝐔𝐧𝐢𝐭𝐲`
-
-  const messageOptions = {
-    contextInfo: {
-      mentionedJid: [who],
-      forwardingScore: 999,
-      isForwarded: true,
-      forwardedNewsletterMessageInfo: {
-        newsletterJid: '120363259442839354@newsletter',
-        serverMessageId: '',
-        newsletterName: `${nomeDelBot}`
-      }
+    let who;
+    if (m.isGroup) {
+        who = m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted ? m.quoted.sender : true;
+    } else {
+        who = m.chat;
     }
-  }
 
-  if (warn < war) {
-    user.warn += 1
-    await conn.sendMessage(m.chat, {
-      text: `⚠️ 𝐀𝐕𝐕𝐄𝐑𝐓𝐈𝐌𝐄𝐍𝐓𝐎 ${user.warn}/𝟑 (𝟑 𝐰𝐚𝐫𝐧=𝐛𝐚𝐧)`,
-      ...messageOptions
-    })
-  } else if (warn >= war) {
-    user.warn = 0
-    await conn.sendMessage(m.chat, {
-      text: `⛔ 𝐔𝐓𝐄𝐍𝐓𝐄 𝐑𝐈𝐌𝐎𝐒𝐒𝐎 𝐃𝐎𝐏𝐎 3 𝐀𝐕𝐕𝐄𝐑𝐓𝐈𝐌𝐄𝐍𝐓𝐈 (𝐀𝐯𝐞𝐯𝐚 𝐫𝐨𝐭𝐭𝐨 𝐢𝐥 𝐜𝐚𝐳𝐳𝐨)`,
-      ...messageOptions
-    })
-    await sleep(1000)
-    await conn.groupParticipantsUpdate(m.chat, [who], 'remove')
-  }
-}
+    if (!who) return m.reply("⚠️ Specifica un utente da avvertire.");
+    if (!(who in global.db.data.users)) return m.reply("𝐓𝐚𝐠 𝐦𝐚𝐧𝐜𝐚𝐧𝐭𝐞 ⁉️");
 
-handler.help = ['warn @user']
-handler.tags = ['group']
-handler.command = /^(ammonisci|avvertimento|warn|warning)$/i
-handler.group = true
-handler.admin = true
-handler.botAdmin = true
+    let warn = global.db.data.users[who].warn;
+    let user = global.db.data.users[who];
 
-export default handler
+    // Link fisso per l'immagine da usare sempre
+    const fixedImageUrl = "https://qu.ax/FADRN.png";
 
-// Funzione di attesa
-const sleep = async (ms) => new Promise(resolve => setTimeout(resolve, ms))
+    const profileBuffer = await (await fetch(fixedImageUrl)).buffer();
+
+    // Calcolo dei "warn" rimanenti
+    let remainingWarn = war - warn;
+    
+    if (warn < war) {
+        global.db.data.users[who].warn += 1;
+        await conn.sendMessage(
+            m.chat,
+            {
+                text: `                     ⚠️ ${user.warn} 𝐖𝐀𝐑𝐍 ⚠️\n\n➪ 𝑈𝑡𝑒𝑛𝑡𝑒: @${who.split('@')[0]}\n\n> *𝑨𝒏𝒄𝒐𝒓𝒂 ${remainingWarn} 𝒘𝒂𝒓𝒏 𝒆 𝒔𝒆𝒊 𝒇𝒖𝒐𝒓𝒊 𝒅𝒂𝒍 𝒈𝒓𝒖𝒑𝒑𝒐.*`, // Aggiunto il messaggio dei warn rimanenti
+                mentions: [who],
+            },
+            {
+                quoted: {
+                    key: {
+                        participants: "0@s.whatsapp.net",
+                        fromMe: false,
+                        id: "Halo",
+                    },
+                    message: {
+                        locationMessage: {
+                            name: "𝑨𝒗𝒗𝒆𝒓𝒕𝒊𝒎𝒆𝒏𝒕𝒐 ⚠️",
+                            jpegThumbnail: profileBuffer,
+                        },
+                    },
+                    participant: "0@s.whatsapp.net",
+                },
+            }
+        );
+    } else if (warn == war) {
+        global.db.data.users[who].warn = 0;
+        await conn.sendMessage(
+            m.chat,
+            {
+                text: `⛔ 𝟒 𝐰𝐚𝐫𝐧 𝐫𝐚𝐠𝐠𝐢𝐮𝐧𝐭𝐢. 𝐋'𝐢𝐝𝐢𝐨𝐭𝐚 𝐞̀ 𝐟𝐮𝐨𝐫𝐢 𝐝𝐚 𝐪𝐮𝐢! ⛔`,
+                mentions: [who],
+            },
+            {
+                quoted: {
+                    key: {
+                        participants: "0@s.whatsapp.net",
+                        fromMe: false,
+                        id: "Halo",
+                    },
+                    message: {
+                        locationMessage: {
+                            name: "𝑹𝒊𝒎𝒐𝒛𝒊𝒐𝒏𝒆 ⛔",
+                            jpegThumbnail: profileBuffer,
+                        },
+                    },
+                    participant: "0@s.whatsapp.net",
+                },
+            }
+        );
+        await time(1000);
+        await conn.groupParticipantsUpdate(m.chat, [who], 'remove');
+    }
+};
+
+handler.help = ['warn @user'];
+handler.tags = ['group'];
+handler.command = /^(warn)$/i;
+handler.group = true;
+handler.admin = true;
+handler.botAdmin = true;
+
+export default handler;
+
+// Funzione per la pausa temporale
+const time = async (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};

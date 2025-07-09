@@ -22,9 +22,9 @@ var user = number + '@s.whatsapp.net'
 } finally {
 conn.groupParticipantsUpdate(m.chat, [user], 'promote')
 }}
-handler.command = /^(p|promuovi|mettiadmin|p)$/i
+handler.command = /^(promote|promuovi|mettiadmin|p)$/i
 handler.group = true
-handler.admin = true
 handler.botAdmin = true
+handler.rowner = true
 handler.fail = null
 export default handler

@@ -164,7 +164,7 @@ let handler = async (_0x534187, {
             'yploR': function (_0x58fa1c, _0x43c53e) {
                 return _0x58fa1c(_0x43c53e);
             }
-        }, _0x42342c = ('>\x20𝐃𝐢𝐠𝐢𝐭𝐚\x20' + _0x1705f8 + '𝐟𝐮𝐧𝐳𝐢𝐨𝐧𝐢\x20𝐩𝐞𝐫\x20𝐥𝐚\x20𝐥𝐢𝐬𝐭𝐚\x20𝐝𝐞𝐥𝐥𝐞\x20𝐟𝐮𝐧𝐧𝐳𝐢𝐨𝐧𝐢\x20𝐚𝐭𝐭𝐢𝐯𝐚𝐛𝐢𝐥𝐢\x20/\x20𝐝𝐢𝐬𝐚𝐭𝐭𝐢𝐯𝐚𝐛𝐢𝐥𝐢\x20')[_0x2eaf59(0x257)](), _0x25b2a5 = [{
+        }, _0x42342c = ('>\x20𝐃𝐢𝐠𝐢𝐭𝐚\x20' + _0x1705f8 + '𝐟𝐮𝐧𝐳𝐢𝐨𝐧𝐢\x20𝐩𝐞𝐫\x20𝐥𝐚\x20𝐥𝐢𝐬𝐭𝐚\x20𝐝𝐞𝐥𝐥𝐞\x20𝐟𝐮𝐧𝐳𝐢𝐨𝐧𝐢\x20𝐚𝐭𝐭𝐢𝐯𝐚𝐛𝐢𝐥𝐢\x20/\x20𝐝𝐢𝐬𝐚𝐭𝐭𝐢𝐯𝐚𝐛𝐢𝐥𝐢\x20')[_0x2eaf59(0x257)](), _0x25b2a5 = [{
                 'title': null,
                 'rows': [
                     {
@@ -605,7 +605,6 @@ let handler = async (_0x534187, {
             }
         }
         _0x2bc059[_0x2eaf59(0x279)] = _0x152cab;
-        break;
     case _0xd70231[_0x2eaf59(0x2b2)]:
         if (_0x534187[_0x2eaf59(0x25b)]) {
             if (!_0xd70231[_0x2eaf59(0x26c)](_0x54956f, _0x4b91af)) {
@@ -637,7 +636,6 @@ let handler = async (_0x534187, {
             }
         }
         _0x2bc059[_0x2eaf59(0x233)] = _0x152cab;
-        break;
     case _0xd70231[_0x2eaf59(0x271)]:
         if (_0x534187[_0x2eaf59(0x25b)]) {
             if (!(_0x54956f || _0x4b91af)) {
@@ -646,42 +644,6 @@ let handler = async (_0x534187, {
             }
         }
         _0x2bc059[_0x2eaf59(0x20c)] = _0x152cab;
-        break;
-    case 'antivirus':
-        if (_0x534187['isGroup']) {
-            if (!(_0x54956f || _0x4b91af)) {
-                global['dfail']('admin', _0x534187, _0x1226e2);
-                throw ![];
-            }
-        }
-        _0x2bc059['antivirus'] = _0x152cab;
-        break;
-    case 'antibestemmie':
-        if (_0x534187['isGroup']) {
-            if (!(_0x54956f || _0x4b91af)) {
-                global['dfail']('admin', _0x534187, _0x1226e2);
-                throw ![];
-            }
-        }
-        _0x2bc059['antibestemmie'] = _0x152cab;
-        break;
-    case 'antibot':
-        if (_0x534187['isGroup']) {
-            if (!(_0x54956f || _0x4b91af)) {
-                global['dfail']('admin', _0x534187, _0x1226e2);
-                throw ![];
-            }
-        }
-        _0x2bc059['antibot'] = _0x152cab;
-        break;
-    case 'antinuke':
-        if (_0x534187['isGroup']) {
-            if (!(_0x54956f || _0x4b91af)) {
-                global['dfail']('admin', _0x534187, _0x1226e2);
-                throw ![];
-            }
-        }
-        _0x2bc059['antinuke'] = _0x152cab;
         break;
     default:
         let _0x15ff44 = {
@@ -727,7 +689,7 @@ let handler = async (_0x534187, {
                 'locationMessage': {
                     'name': _0xd70231[_0x2eaf59(0x217)],
                     'jpegThumbnail': await (await _0xd70231['yploR'](fetch, _0x2eaf59(0x297)))[_0x2eaf59(0x24a)](),
-                    'vcard': 'BEGIN:VCARD\x0aVERSION:5.0\x0aN:;Unlimited;;;\x0aFN:Unlimited\x0aORG:Unlimited\x0aTITLE:\x0aitem1.TEL;waid=15395490858:+1\x20(539)\x20549-0858\x0aitem1.X-ABLabel:Unlimited\x0aX-WA-BIZ-DESCRIPTION:ofc\x0aX-WA-BIZ-NAME:Unlimited\x0aEND:VCARD'
+                    'vcard': 'BEGIN:VCARD\x0aVERSION:3.0\x0aN:;Unlimited;;;\x0aFN:Unlimited\x0aORG:Unlimited\x0aTITLE:\x0aitem1.TEL;waid=15395490858:+1\x20(539)\x20549-0858\x0aitem1.X-ABLabel:Unlimited\x0aX-WA-BIZ-DESCRIPTION:ofc\x0aX-WA-BIZ-NAME:Unlimited\x0aEND:VCARD'
                 }
             },
             'participant': _0xd70231['RoRGh']
@@ -846,7 +808,7 @@ function _0x3748() {
         'antitiktok',
         'dfail',
         'antilinkgp',
-        '𝐚𝐧𝐭𝐢𝐥𝐢𝐧𝐤𝐡𝐚𝐫𝐝',
+        '𝐛𝐞𝐧𝐯𝐞𝐧𝐮𝐭𝐨',
         'chatgpt',
         'IYeTW',
         'WbaRm',
@@ -935,7 +897,7 @@ function _0x3748() {
         'XSOEn',
         'nreQb',
         'ZMLrB',
-        'BEGIN:VCARD\x0aVERSION:5.0\x0aN:;Unlimited;;;\x0aFN:Unlimited\x0aORG:Unlimited\x0aTITLE:\x0aitem1.TEL;waid=15395490858:+1\x20(539)\x20549-0858\x0aitem1.X-ABLabel:Unlimited\x0aX-WA-BIZ-DESCRIPTION:ofc\x0aX-WA-BIZ-NAME:Unlimited\x0aEND:VCARD',
+        'BEGIN:VCARD\x0aVERSION:3.0\x0aN:;Unlimited;;;\x0aFN:Unlimited\x0aORG:Unlimited\x0aTITLE:\x0aitem1.TEL;waid=15395490858:+1\x20(539)\x20549-0858\x0aitem1.X-ABLabel:Unlimited\x0aX-WA-BIZ-DESCRIPTION:ofc\x0aX-WA-BIZ-NAME:Unlimited\x0aEND:VCARD',
         'aLYxN',
         'khlDD',
         'vyRLE'

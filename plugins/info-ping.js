@@ -1,143 +1,83 @@
-import { cpus as _cpus, totalmem, freemem } from 'os'
-import { performance } from 'perf_hooks'
-import { sizeFormatter } from 'human-readable'
+import os from 'os';
+import 'util';
+import 'human-readable';
+import '@whiskeysockets/baileys';
+import 'fs';
+import fetch from 'node-fetch'; 
+import { performance } from 'perf_hooks';
 
-let format = sizeFormatter({
-  std: 'JEDEC',
-  decimalPlaces: 2,
-  keepTrailingZeroes: false,
-  render: (literal, symbol) => `${literal} ${symbol}B`,
-})
-
-let handler = async (m, { conn, usedPrefix, command }) => {
-  let nomeDelBot = global.db.data.nomedelbot || `𝐂𝐡𝐚𝐭𝐔𝐧𝐢𝐭𝐲`
-  let versioneBot = '5.2' // Specifica la versione del bot
-  let old = performance.now()
-  let neww = performance.now()
-  let speed = (neww - old).toFixed(2) // Limita la velocità a 2 decimali
-  let uptime = process.uptime() * 1000
-
-  // CPU info
-  const cpus = _cpus().map(cpu => {
-    cpu.total = Object.keys(cpu.times).reduce((last, type) => last + cpu.times[type], 0)
-    return cpu
-  })
-
-  const cpu = cpus.reduce((last, cpu, _, { length }) => {
-    last.total += cpu.total
-    last.speed += cpu.speed / length
-    last.times.user += cpu.times.user
-    last.times.nice += cpu.times.nice
-    last.times.sys += cpu.times.sys
-    last.times.idle += cpu.times.idle
-    last.times.irq += cpu.times.irq
-    return last
-  }, {
-    speed: 0,
-    total: 0,
-    times: {
-      user: 0,
-      nice: 0,
-      sys: 0,
-      idle: 0,
-      irq: 0
-    }
-  })
-
-  let cpuModel = cpus[0]?.model || 'Unknown Model'
-  let cpuSpeed = cpu.speed.toFixed(2)
-  let networkSpeed = 'N/A'
-
-  let caption = `╭━〔🚀𝑺𝑻𝑨𝑻𝐎 𝑺𝑰𝑺𝑻𝑬𝑴𝑨🚀〕━┈⊷
-┃◈╭─────────────·๏
-┃◈┃• ⌛ *Uptime*: ${clockString(uptime)}
-┃◈┃• ⚡ *Ping*: ${speed} ms
-┃◈┃
-┃◈┃• 💻 *CPU*: ${cpuModel}
-┃◈┃• 🔋 *Usage*: ${cpuSpeed} MHz 
-┃◈┃
-┃◈┃• 💾 *RAM*: ${format(totalmem() - freemem())} / ${format(totalmem())}
-┃◈┃• 🟢 *Free*: ${format(freemem())}
-┃◈┃
-┃◈┃• 🌐 *Network*: ${networkSpeed}
-┃◈└───────────┈⊷
-┃◈┃• *𝑽𝑬𝑹𝑺𝑰𝑶𝑵𝑬:* ${vs}
-┃◈┃•  𝐂𝐎𝐋𝐋𝐀𝐁: 𝐃𝐑𝐆𝐁
-┃◈┃• *𝐒𝐔𝐏𝐏𝐎𝐑𝐓𝐎:* (.supporto)
-╰━━━━━━━━━━━━━┈·๏
-
-`
-
-  const profilePictureUrl = await fetchProfilePictureUrl(conn, m.sender)
-
-  let messageOptions = {
-    contextInfo: {
-      forwardingScore: 999,
-      isForwarded: true,
-      forwardedNewsletterMessageInfo: {
-        newsletterJid: '120363259442839354@newsletter',
-        serverMessageId: '',
-        newsletterName: `${nomeDelBot}`
-      }
-    }
-  }
-
-  if (profilePictureUrl !== 'default-profile-picture-url') {
-    try {
-      messageOptions.contextInfo.externalAdReply = {
-        title: nomeDelBot,
-        body: `Versione: ${versioneBot}`,
-        mediaType: 1,
-        renderLargerThumbnail: false,
-        previewType: 'thumbnail',
-        thumbnail: await fetchThumbnail('https://i.ibb.co/6RMtRXW0/dragonball.jpg'),
-      }
-    } catch (error) {
-      console.error('Error fetching thumbnail:', error)
-    }
-  }
-
+let handler = async (m, { conn, usedPrefix }) => {
   try {
+    const uptimeMs = process.uptime() * 1000;
+    const uptimeStr = clockString(uptimeMs);
+    const startTime = performance.now();
+    const endTime = performance.now();
+    const speed = (endTime - startTime).toFixed(4);
+
+    const totalMem = os.totalmem();
+    const freeMem = os.freemem();
+    const usedMem = totalMem - freeMem;
+    const percentUsed = ((usedMem / totalMem) * 100).toFixed(2);
+
+    const totalMemGB = (totalMem / 1024 / 1024 / 1024).toFixed(2);
+    const usedMemGB = (usedMem / 1024 / 1024 / 1024).toFixed(2);
+
+    const botName = global.db?.data?.nomedelbot || "ᴼʳⁱᵍⁱⁿ ᴮᵒᵗ✦";
+    const imageResponse = await fetch('https://telegra.ph/file/2f38b3fd9cfba5935b496.jpg');
+    if (!imageResponse.ok) throw new Error(`Errore durante la richiesta: ${imageResponse.status}`);
+
+    const botStartTime = new Date(Date.now() - uptimeMs);
+    const activationTime = botStartTime.toLocaleString('it-IT', {
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    const message = `
+꧁──────•✦•──────꧂
+                 𝓞𝓻𝓲𝓰𝓲𝓷 𝓑𝓸𝓽
+꧁──────•✦•──────꧂
+
+𝑼𝒑𝒕𝒊𝒎𝒆: ${uptimeStr}  
+𝑽𝒆𝒍𝒐𝒄𝒊𝒕𝒂̀: ${speed} ms  
+𝑹𝑨𝑴 𝒖𝒔𝒂𝒕𝒂: ${usedMemGB} / ${totalMemGB} GB (${percentUsed}%)  
+𝑨𝒗𝒗𝒊𝒐: ${activationTime}
+
+꧁──────•✦•──────꧂
+𝑶𝒘𝒏𝒆𝒓: ʏᴏᴜɴꜱ  
+𝑺𝒕𝒂𝒕𝒐: Online  
+𝑰𝑮: instagram.com/il_mulatto07
+꧁──────•✦•──────꧂
+`.trim();
+
     await conn.sendMessage(m.chat, {
-      text: caption,
-      ...messageOptions
-    })
-  } catch (error) {
-    console.error('Error sending message:', error)
+      text: message,
+      contextInfo: {
+        mentionedJid: conn.parseMention(botName),
+        // forwardingScore: 1,
+       // isForwarded: true,
+      },
+    });
+  } catch (err) {
+    console.error("Errore nell'handler:", err);
   }
-}
-
-async function fetchProfilePictureUrl(conn, sender) {
-  try {
-    return await conn.profilePictureUrl(sender)
-  } catch (error) {
-    console.error('Error fetching profile picture URL:', error)
-    return 'default-profile-picture-url' // Fallback URL in case of error
-  }
-}
-
-async function fetchThumbnail(url) {
-  try {
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(`Failed to fetch thumbnail: ${response.statusText}`)
-    const buffer = await response.buffer()
-    return buffer
-  } catch (error) {
-    console.error('Error fetching thumbnail:', error)
-    return 'default-thumbnail' // Fallback thumbnail in case of error
-  }
-}
-
-handler.help = ['ping', 'speed']
-handler.tags = ['info', 'tools']
-handler.command = /^(ping)$/i
-
-export default handler
+};
 
 function clockString(ms) {
-  let d = Math.floor(ms / 86400000)
-  let h = Math.floor(ms / 3600000) % 24
-  let m = Math.floor(ms / 60000) % 60
-  let s = Math.floor(ms / 1000) % 60
-  return [d, h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
+  let h = Math.floor(ms / 3600000);
+  let m = Math.floor((ms % 3600000) / 60000);
+  let s = Math.floor((ms % 60000) / 1000);
+  return [h, m, s]
+    .map(v => v.toString().padStart(2, '0'))
+    .join(':');
 }
+
+handler.help = ['ping'];
+handler.tags = ['info'];
+handler.command = /^(ping|stato|kinderping)$/i;
+
+export default handler;

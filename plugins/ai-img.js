@@ -8,5 +8,5 @@ let image = res.getRandom()
 let link = image
 conn.sendFile(m.chat, link, 'errore.jpg', `🔍 𝐈𝐦𝐦𝐚𝐠𝐢𝐧𝐞: ${text}`, m)
 }
-handler.command = /^(cercaimmagine)$/i
+handler.command = /^(immagine|img|immagini)$/i
 export default handler

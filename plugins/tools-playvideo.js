@@ -1,5 +1,3 @@
-// Codice di tools-playvideo.js
-
 import fetch from 'node-fetch';
 import yts from 'yt-search';
 import axios from 'axios';
@@ -60,18 +58,12 @@ const ddownr = {
   }
 };
 
-export async function downloadFromSource(source, url, title, thumb, m, conn) {
+const downloadFromSource = async (source, url, title, thumb, m, conn) => {
   try {
     const res = await fetch(source);
-    let json;
-    try {
-      json = await res.json();
-    } catch (e) {
-      console.warn(`Risposta non JSON valida da ${source}`);
-      return false;
-    }
-    const { data, result, downloads } = json;
-    let downloadUrl = data?.dl || data?.download_url || data?.url || data?.download?.url || result?.download?.url || downloads?.url || data?.downloadUrl || data?.result?.url || data?.result?.download_url;
+    const { data, result, downloads } = await res.json();
+    let downloadUrl = data?.dl || result?.download?.url || downloads?.url || data?.download?.url;
+
     if (downloadUrl) {
       await conn.sendMessage(m.chat, {
         video: { url: downloadUrl },
@@ -122,10 +114,7 @@ const handler = async (m, { conn, text }) => {
       `https://api.siputzx.my.id/api/d/ytmp4?url=${url}`,
       `https://api.zenkey.my.id/api/download/ytmp4?apikey=zenkey&url=${url}`,
       `https://axeel.my.id/api/download/video?url=${encodeURIComponent(url)}`,
-      `https://delirius-apiofc.vercel.app/download/ytmp4?url=${url}`,
-      `https://api.neoxr.eu/api/youtube?url=${url}&type=video&quality=720p&apikey=GataDios`,
-      `https://api.davidcyriltech.my.id/download/ytmp3?url=${encodeURIComponent(url)}`,
-      `https://exonity.tech/api/ytdlp2-faster?apikey=adminsepuh&url=${url}`
+      `https://delirius-apiofc.vercel.app/download/ytmp4?url=${url}`
     ];
 
     const downloadPromises = sources.map(source => downloadFromSource(source, url, title, thumb, m, conn));

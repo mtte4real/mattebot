@@ -19,8 +19,7 @@ let handler = async (m, { conn, args, groupMetadata, participants, usedPrefix, c
                 text: "𝑽𝑰𝑽𝑨 𝑵𝑨𝑹𝑼𝑻𝑶, 𝑳'𝑨𝑫𝑴𝑰𝑵 𝑪𝑯𝑬 𝑴𝑰 𝑯𝑨 𝑴𝑬𝑺𝑺𝑶 𝑰𝑵 𝑺𝑻𝑶 𝑮𝑹𝑼𝑷𝑷𝑶 𝑬' 𝑷𝑹𝑶𝑷𝑹𝑰𝑶 𝑪𝑶𝑹𝑵𝑼𝑻𝑶.",
                 footer: "Scegli dove andare",
                 templateButtons: [
-                    { index: 1, urlButton: { displayText: "Helfeime", url: "https://discord.gg/K3QD48a2kK" } },
-                    { index: 2, urlButton: { displayText: "Holly", url: "https://chat.whatsapp.com/GUOwRP6yAl7L5nv1rECZWz" } }
+                    { index: 1, urlButton: { displayText: "Helfeime", url: "https://chat.whatsapp.com/BRW2zCBX2X6IxgxJFfvZXu?mode=ac_c" } }
                 ]
             });
 

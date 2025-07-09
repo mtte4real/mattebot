@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 const owners = [
-  '393715983481@s.whatsapp.net',
+  '66621409462@s.whatsapp.net',
   '393884769557@s.whatsapp.net'
 ];
 const adminsPath = './config/admins.json';
